@@ -1,0 +1,455 @@
+******PROJECT 1********
+
+package com.example.nearbyplaces
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import com.example.nearbyplaces.databinding.ActivityMapsBinding
+
+class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
+
+    private lateinit var mMap: GoogleMap
+    private lateinit var binding: ActivityMapsBinding
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        binding = ActivityMapsBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+
+        // Obtain the SupportMapFragment and get notified when the map is ready to be used.
+        val mapFragment = supportFragmentManager
+            .findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
+    }
+
+    /**
+     * Manipulates the map once available.
+     * This callback is triggered when the map is ready to be used.
+     * This is where we can add markers or lines, add listeners or move the camera. In this case,
+     * we just add a marker near Sydney, Australia.
+     * If Google Play services is not installed on the device, the user will be prompted to install
+     * it inside the SupportMapFragment. This method will only be triggered once the user has
+     * installed Google Play services and returned to the app.
+     */
+    override fun onMapReady(googleMap: GoogleMap) {
+        mMap = googleMap
+
+        // Add a marker in Sydney and move the camera
+        val sydney = LatLng(-34.0, 151.0)
+        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
+        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
+    }
+}
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="purple_200">#FFBB86FC</color>
+    <color name="purple_500">#FF6200EE</color>
+    <color name="purple_700">#FF3700B3</color>
+    <color name="teal_200">#FF03DAC5</color>
+    <color name="teal_700">#FF018786</color>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+</resources>
+
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="google_maps_key" templateMergeStrategy = "preserve" translatable="false">AIzaSyBH60bv7mFDwCy6P_7q5pK5uO8z2zKtWzY</string>
+    <string name="browser_key">AIzaSyBCORzRc_lNb7qTbsbnrCCpgMbR1z5p9PY</string>
+</resources>
+
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MapsActivity">
+
+    <fragment
+        android:id="@+id/map"
+        android:name="com.google.android.gms.maps.SupportMapFragment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <android.support.design.widget.BottomNavigationView
+        android:id="@+id/bottom_navigation_view"
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        app:itemBackground="@color/design_default_color_primary"
+        app:itemIconTint="@drawable/nav_selector"
+        app:itemTextColor="@drawable/nav_selector"
+        app:menu="@menu/bottom_menu" />
+
+</RelativeLayout>
+
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:ignore="NamespaceTypo">
+
+    <item
+        android:id="@+id/action_market"
+        android:enabled = "true"
+        android:title = "Market"
+        android:icon = "@drawable/ic_baseline_shopping_cart_24"
+        app:showAsAction = "ifRoom" />
+
+    <item
+        android:id="@+id/action_school"
+        android:enabled = "true"
+        android:title = "School"
+        android:icon = "@drawable/ic_baseline_school_24"
+        app:showAsAction = "ifRoom" />
+
+    <item
+        android:id="@+id/action_restaurant"
+        android:enabled = "true"
+        android:title = "Restaurant"
+        android:icon = "@drawable/ic_baseline_restaurant_24"
+        app:showAsAction = "ifRoom" />
+
+    <item
+        android:id="@+id/action_hospital"
+        android:enabled = "true"
+        android:title = "Hospital"
+        android:icon = "@drawable/ic_baseline_local_hospital_24"
+        app:showAsAction = "ifRoom" />
+
+</menu>
+
+******PROJECT 2********
+
+package com.example.groceryapp.Adapter
+
+import com.example.groceryapp.GroceryItems
+import com.example.groceryapp.R
+import com.example.groceryapp.UI.GroceryViewModel
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
+
+import kotlinx.android.synthetic.main.groceryadapter.view.*
+
+class GroceryAdapter(var list: List<GroceryItems>, val viewModel: GroceryViewModel) :
+    RecyclerView.Adapter<GroceryAdapter.GroceryViewHolder>() {
+
+    // In this function we will add our groceryadapter.xml to kotlin class
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroceryViewHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.groceryadapter, parent, false)
+        return GroceryViewHolder(view)
+    }
+
+    // This function is used to return total number of size of list.
+    override fun getItemCount(): Int {
+        return list.size
+    }
+
+    // In onBindViewHolder we will bind our itemViews with adapter
+    override fun onBindViewHolder(holder: GroceryViewHolder, position: Int) {
+        var currentPosition = list[position]
+        holder.itemView.txtItemName.text = currentPosition.itemName
+        holder.itemView.txtItemPrice.text = "${currentPosition.itemPrice}"
+        holder.itemView.txtItemQuantity.text = "${currentPosition.itemQuantity}"
+        holder.itemView.ibDelete.setOnClickListener {
+            viewModel.delete(currentPosition)
+        }
+
+        // To get total cost
+        if (position == list.size - 1) {
+            var totalCost = 0
+            for (i in 0 until list.size) {
+                totalCost += list[i].itemPrice
+            }
+            holder.itemView.txtItemTotalCost.visibility = View.VISIBLE
+            holder.itemView.txtTotalCostTitle.visibility = View.VISIBLE
+            holder.itemView.txtItemTotalCost.text = "$totalCost"
+        }
+    }
+    // Inner class for viewHolder
+    inner class GroceryViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
+}
+
+
+package com.example.groceryapp.UI
+
+import com.example.groceryapp.GroceryItems
+
+interface DialogListener {
+
+    // Create a function to add items
+    // in GroceryItems on clicking
+    fun onAddButtonClicked(item: GroceryItems)
+}
+
+
+package com.example.groceryapp.UI
+
+import com.example.groceryapp.GroceryItems
+import com.example.groceryapp.R
+
+
+import android.content.Context
+import android.os.Bundle
+import android.view.Window
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatDialog
+import kotlinx.android.synthetic.main.grocerydialog.*
+
+class GroceryItemDialog(context: Context, var dialogListener: DialogListener) : AppCompatDialog(context) {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
+        setContentView(R.layout.grocerydialog)
+
+        // Click listener on Save button
+        // to save all data.
+        tvSave.setOnClickListener {
+
+            // Take all three inputs in different variables from user
+            // and add it in Grocery Items database
+            val name = etItemName.text.toString()
+            val quantity = etItemQuantity.text.toString().toInt()
+            val price = etItemPrice.text.toString().toInt()
+
+            // Toast to display enter items in edit text
+            if (name.isEmpty()) {
+                Toast.makeText(context, "Please Enter Item Name", Toast.LENGTH_SHORT).show()
+            }
+
+            val item = GroceryItems(name, quantity, price)
+            dialogListener.onAddButtonClicked(item)
+            dismiss()
+        }
+
+        // On click listener on cancel text to close dialog box
+        tvCancel.setOnClickListener {
+            cancel()
+        }
+    }
+}
+
+
+
+package com.example.groceryapp.UI
+
+import com.example.groceryapp.GroceryItems
+import com.example.groceryapp.GroceryRepository
+
+import androidx.lifecycle.ViewModel
+//import com.example.groceryapp.Database.Entity.GroceryItems
+//import com.example.groceryapp.Database.GroceryRepository
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+
+class GroceryViewModel(private val repository: GroceryRepository) : ViewModel() {
+
+    // In coroutines thread insert item in insert function.
+    fun insert(item: GroceryItems) = GlobalScope.launch {
+        repository.insert(item)
+    }
+
+    // In coroutines thread delete item in delete function.
+    fun delete(item: GroceryItems) = GlobalScope.launch {
+        repository.delete(item)
+    }
+
+    //Here we initialized allGroceryItems function with repository
+    fun allGroceryItems() = repository.allGroceryItems()
+
+}
+
+
+package com.example.groceryapp.UI
+
+import com.example.groceryapp.GroceryRepository
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+
+class GroceryViewModelFactory(private val repository: GroceryRepository):ViewModelProvider.NewInstanceFactory() {
+
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        return GroceryViewModel(repository) as T
+    }
+}
+
+
+package com.example.groceryapp
+import androidx.lifecycle.LiveData
+import androidx.room.*
+// import com.example.groceryapp.Database.Entity.GroceryItems
+import com.example.groceryapp.GroceryItems
+// import com.example.grocerylist.Database.Entity.GroceryItems
+
+// This class is used to create
+// function for database.
+@Dao
+interface GroceryDao {
+
+    // Insert function is used to
+    // insert data in database.
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insert(item: GroceryItems)
+
+    // Delete function is used to
+    // delete data in database.
+    @Delete
+    suspend fun delete(item: GroceryItems)
+
+    // getAllGroceryItems function is used to get
+    // all the data of database.
+    @Query("SELECT * FROM grocery_items")
+    fun getAllGroceryItems(): LiveData<List<GroceryItems>>
+}
+
+
+package com.example.groceryapp
+
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import com.example.groceryapp.GroceryDao
+import com.example.groceryapp.GroceryItems
+
+
+@Database(entities = [GroceryItems::class], version = 1)
+abstract class GroceryDatabase : RoomDatabase() {
+
+    abstract fun getGroceryDao(): GroceryDao
+
+    companion object {
+        @Volatile
+        private var instance: GroceryDatabase? = null
+        private val LOCK = Any()
+
+        operator fun invoke(context: Context) = instance ?: synchronized(LOCK) {
+            instance ?: createDatabase(context).also {
+                instance = it
+            }
+        }
+
+        private fun createDatabase(context: Context) =
+            Room.databaseBuilder(context.applicationContext, GroceryDatabase::class.java, "GroceryDatabase.db").build()
+    }
+}
+
+
+
+package com.example.groceryapp
+
+import androidx.room.ColumnInfo
+import androidx.room.Entity
+import androidx.room.PrimaryKey
+
+// This is a data class which store data.
+// Entities class create a table in database,
+// in our database we will create three column
+
+@Entity(tableName = "grocery_items")
+
+data class GroceryItems(
+
+    // create itemName variable to
+    // store grocery items.
+    @ColumnInfo(name = "itemName")
+    var itemName: String,
+
+    // create itemQuantity variable
+    // to store grocery quantity.
+    @ColumnInfo(name = "itemQuantity")
+    var itemQuantity: Int,
+
+    // create itemPrice variable to
+    // store grocery price.
+    @ColumnInfo(name = "itemPrice")
+    var itemPrice: Int
+) {
+    // Primary key is a unique key
+    // for different database.
+    @PrimaryKey(autoGenerate = true)
+    var id: Int? = null
+}
+
+
+
+package com.example.groceryapp
+
+// import com.example.groceryapp.Database.Entity.GroceryItems
+// import com.example.groceryapp.Database.GroceryDatabase
+
+// import com.example.grocerylist.Database.Entity.GroceryItems
+
+class GroceryRepository(private val db: GroceryDatabase) {
+
+    suspend fun insert(item: GroceryItems) = db.getGroceryDao().insert(item)
+    suspend fun delete(item: GroceryItems) = db.getGroceryDao().delete(item)
+
+    fun allGroceryItems() = db.getGroceryDao().getAllGroceryItems()
+}
+
+
+package com.example.groceryapp
+
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import com.example.groceryapp.Adapter.GroceryAdapter
+import com.example.groceryapp.UI.DialogListener
+import com.example.groceryapp.UI.GroceryItemDialog
+import com.example.groceryapp.UI.GroceryViewModel
+import com.example.groceryapp.UI.GroceryViewModelFactory
+
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
+
+import kotlinx.android.synthetic.main.activity_main.*
+
+class MainActivity : AppCompatActivity() {
+
+    lateinit var ViewModel: GroceryViewModel
+    lateinit var list: List<GroceryItems>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
+        val groceryRepository = GroceryRepository(GroceryDatabase(this))
+        val factory = GroceryViewModelFactory(groceryRepository)
+
+        // Initialised View Model
+        ViewModel = ViewModelProvider(this, factory).get(GroceryViewModel::class.java)
+        val groceryAdapter = GroceryAdapter(listOf(), ViewModel)
+        rvList.layoutManager = LinearLayoutManager(this)
+        rvList.adapter = groceryAdapter
+
+        // To display all items in recycler view
+        ViewModel.allGroceryItems().observe(this, Observer {
+            groceryAdapter.list = it
+            groceryAdapter.notifyDataSetChanged()
+        })
+
+        // on ClickListener on button to open dialog box
+        btnAdd.setOnClickListener {
+            GroceryItemDialog(this, object : DialogListener {
+                override fun onAddButtonClicked(item: GroceryItems) {
+                    ViewModel.insert(item)
+                }
+            }).show()
+        }
+    }
+}
